@@ -1,9 +1,9 @@
 {
-  "name": "webrepin/hltv-api",
+  "name": "virtual-irk/hltv-api",
   "description": "PHP Hltv API Client",
   "keywords": ["csgo","csgoapi", "api", "hltv", "hltv.org", "cs"],
   "type": "library",
-  "homepage": "https://github.com/webrepin/hltv-api",
+  "homepage": "https://github.com/virtual-irk/hltv-api",
   "license": "MIT",
   "minimum-stability": "stable",
   "authors": [
@@ -11,13 +11,24 @@
       "name": "Konstantin Repin",
       "email": "repin.and.co@gmail.com",
       "homepage": "https://github.com/webrepin"
+    },
+    {
+      "name": "Aleksey Belyaev",
+      "email": "38virtual@gmail.com",
+      "homepage": "https://github.com/virtual-irk"
+    }
+  ],
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/virtual-irk/php-simple-html-dom-parser"
     }
   ],
   "require": {
     "php": ">=7.0.0",
     "ext-curl": "*",
     "guzzlehttp/guzzle": "~6.0",
-    "sunra/php-simple-html-dom-parser": "1.5.2"
+    "sunra/php-simple-html-dom-parser": "dev-master"
   },
   "require-dev": {
     "phpunit/phpunit": "~5.0",
