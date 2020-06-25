@@ -1,7 +1,9 @@
 <?php
+
 namespace HltvApi\Entity;
 
 use HltvApi\Client;
+
 /**
  * Class Entity
  *
@@ -12,7 +14,7 @@ use HltvApi\Client;
 abstract class Entity
 {
     /**
-     * @var
+     * @var array
      */
     protected $data;
 

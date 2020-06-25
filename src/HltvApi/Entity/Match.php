@@ -2,7 +2,6 @@
 
 namespace HltvApi\Entity;
 
-
 /**
  * Class Match
  * @package HltvApi\Entity
@@ -36,51 +35,51 @@ class Match extends Entity
     protected $details;
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getId()
+    public function getId(): ?int
     {
-        return $this->getValue('id');
+        return (int)$this->getValue('id') ?? null;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getTeam1()
+    public function getTeam1(): ?string
     {
-        return $this->getValue('team1');
+        return trim($this->getValue('team1')) ?? null;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getTeam2()
+    public function getTeam2(): ?string
     {
-        return $this->getValue('team2');
+        return trim($this->getValue('team2')) ?? null;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getMatchUrl()
+    public function getMatchUrl(): ?string
     {
-        return $this->getValue('url');
+        return trim($this->getValue('url')) ?? null;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getEvent()
+    public function getEvent(): ?string
     {
-        return $this->getValue('event');
+        return trim($this->getValue('event')) ?? null;
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getStatus()
+    public function getStatus(): ?int
     {
-        return $this->getValue('status');
+        return (int)$this->getValue('status') ?? null;
     }
 
     /**
@@ -88,39 +87,39 @@ class Match extends Entity
      */
     public function getStatusName(): ?string
     {
-        return isset(self::STATUS_NAME[$this->getValue('status')]) ? self::STATUS_NAME[$this->getValue('status')] : null;
+        return trim(self::STATUS_NAME[$this->getValue('status')]) ?? null;
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getWinner()
+    public function getWinner(): ?int
     {
-        return $this->getValue('winner');
+        return (int)$this->getValue('winner') ?? null;
     }
 
     /**
-     * @return array
+     * @return array|null
      */
-    public function getResult()
+    public function getResult(): ?array
     {
-        return $this->getValue('result');
+        return $this->getValue('result') ?? null;
     }
 
     /**
-     * @return string
+     * @return int|null
      */
-    public function getTimestamp()
+    public function getTimestamp(): ?int
     {
-        return $this->getValue('timestamp');
+        return (int)$this->getValue('timestamp') ?? null;
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getType()
+    public function getType(): ?int
     {
-        return $this->getValue('type');
+        return (int)$this->getValue('type') ?? null;
     }
 
     /**
@@ -128,7 +127,7 @@ class Match extends Entity
      */
     public function getTypeName(): ?string
     {
-        return isset(self::TYPE_NAME[$this->getValue('type')]) ? self::TYPE_NAME[$this->getValue('type')] : null;
+        return trim(self::TYPE_NAME[$this->getValue('type')]) ?? null;
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
-namespace HltvApi\Parsers;
 
+namespace HltvApi\Parsers;
 
 use HltvApi\Entity\Match;
 use simplehtmldom_1_5\simple_html_dom_node;
@@ -11,16 +11,15 @@ use simplehtmldom_1_5\simple_html_dom_node;
  */
 class UpcomingParser extends Parser
 {
-
     protected $days = 1;
 
     /**
      * Parse implementation of Parser class. Should returning a rows of match data
      * @throws \Exception
      */
-    public function parse() : array
+    public function parse(): array
     {
-        if(!$this->days) {
+        if (!$this->days) {
             throw new \Exception('UpcomingParser expect integer count of days more then 0');
         }
 
@@ -28,13 +27,13 @@ class UpcomingParser extends Parser
         $items = [];
         while ($idx < $this->days) {
             $idx++;
-            $day = $this->data->find('.upcoming-matches .match-day',0);
+            $day = $this->data->find('.upcoming-matches .match-day', 0);
             $items = array_merge($items, $day->find(' .upcoming-match'));
         }
 
         $data = [];
         /** @var simple_html_dom_node[] $items */
-        foreach ($items as $item){
+        foreach ($items as $item) {
             $url = $item->find('.a-reset', 0)->getAttribute('href');
             $id = $this->getId($url);
             $type = $this->getType(trim($item->find('.map-text', 0)->plaintext));
@@ -57,7 +56,10 @@ class UpcomingParser extends Parser
         return $data;
     }
 
-    public function setDays(int $days)
+    /**
+     * @param int $days
+     */
+    public function setDays(int $days): void
     {
         $this->days = $days;
     }

@@ -1,6 +1,6 @@
 <?php
-namespace HltvApi\Parsers;
 
+namespace HltvApi\Parsers;
 
 use HltvApi\Entity\Match;
 use simplehtmldom_1_5\simple_html_dom_node;
@@ -15,12 +15,12 @@ class ResultsParser extends Parser
      * Parse implementation of Parser class. Should returning a rows of match data
      * @throws \Exception
      */
-    public function parse() : array
+    public function parse(): array
     {
         $items = $this->data->find('.results-sublist .result-con .a-reset');
         $data = [];
         /** @var simple_html_dom_node[] $items */
-        foreach ($items as $item){
+        foreach ($items as $item) {
             $url = $item->getAttribute('href');
             $id = $this->getId($url);
             $result = $this->getResult(trim($item->find('.result-score', 0)->plaintext));
@@ -43,11 +43,15 @@ class ResultsParser extends Parser
         return $data;
     }
 
-    protected function getResult($data)
+    /**
+     * @param $data
+     * @return array
+     */
+    protected function getResult($data): array
     {
         $result = explode(' - ', $data);
         $r1 = $result[0];
         $r2 = $result[1];
-        return [$r1 , $r2];
+        return [$r1, $r2];
     }
 }

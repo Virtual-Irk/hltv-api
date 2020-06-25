@@ -1,6 +1,6 @@
 <?php
-namespace HltvApi\Parsers;
 
+namespace HltvApi\Parsers;
 
 use HltvApi\Entity\Match;
 use simplehtmldom_1_5\simple_html_dom_node;
@@ -17,7 +17,7 @@ class OngoingParser extends Parser
      * @param $type
      * @return int|null
      */
-    public function getType($type)
+    public function getType($type): ?int
     {
         $lt = null;
         switch ($type) {
@@ -35,7 +35,7 @@ class OngoingParser extends Parser
                 break;
             default:
                 $lt = Match::TYPE_UNDEFINED;
-            break;
+                break;
         }
 
         return $lt;
@@ -44,13 +44,13 @@ class OngoingParser extends Parser
     /**
      * Parse implementation of Parser class. Should returning a rows of match data
      */
-    public function parse() : array
+    public function parse(): array
     {
         $items = $this->data->find('.live-matches .live-match .a-reset');
 
         $data = [];
         /** @var simple_html_dom_node[] $items */
-        foreach ($items as $item){
+        foreach ($items as $item) {
             $url = $item->getAttribute('href');
             $id = $this->getId($url);
             $type = $this->getType(trim($item->find('.bestof', 0)->plaintext));

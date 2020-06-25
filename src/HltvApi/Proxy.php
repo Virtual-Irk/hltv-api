@@ -1,6 +1,6 @@
 <?php
-namespace HltvApi;
 
+namespace HltvApi;
 
 /**
  * Class Proxy
