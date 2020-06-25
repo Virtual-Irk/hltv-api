@@ -31,11 +31,11 @@ class MatchDetails extends Match
     }
 
     /**
-     * @return float|null
+     * @return array|null
      */
-    public function getOdds(): ?float
+    public function getOdds(): ?array
     {
-        return floatval($this->getValue('odds')) ?? null;
+        return $this->getValue('odds');
     }
 
     /**
