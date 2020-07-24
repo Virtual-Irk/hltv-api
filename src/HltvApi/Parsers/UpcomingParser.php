@@ -11,18 +11,24 @@ use simplehtmldom_1_5\simple_html_dom_node;
  */
 class UpcomingParser extends Parser
 {
-    //todo: move the settings to the config-file
-    const DAY_WRAPPER = '.upcomingMatchesSection';
-    const MATCH_WRAPPER = '.upcomingMatch';
-    const MATCH_URL_WRAPPER = '.a-reset';
-    const MATCH_URL_ATTRIBUTE = 'href';
-    const MATCH_TYPE_WRAPPER = '.matchMeta';
-    const MATCH_TEAM_NAME_WRAPPER = '.matchTeamName';
-    const MATCH_EVENT_NAME_WRAPPER = '.matchEventName';
-    const MATCH_TIME_WRAPPER = '.matchTime';
-    const MATCH_TIME_ATTRIBUTE = 'data-unix';
+    /** @var int */
+    protected $days = 1;
 
-    protected int $days = 1;
+    /**
+     * @return int
+     */
+    public function getDays(): int
+    {
+        return $this->days;
+    }
+
+    /**
+     * @param int $days
+     */
+    public function setDays(int $days): void
+    {
+        $this->days = $days;
+    }
 
     /**
      * Parse implementation of Parser class. Should returning a rows of match data
@@ -39,7 +45,7 @@ class UpcomingParser extends Parser
         while ($idx < $this->days) {
             $idx++;
             $day = $this->data->find(self::DAY_WRAPPER, 0);
-            $items = array_merge($items, $day->find(self::MATCH_WRAPPER));
+            $items = array_merge($items, $day->find(self::MATCH_UPCOMING_WRAPPER));
         }
 
         $data = [];
@@ -60,13 +66,5 @@ class UpcomingParser extends Parser
             $data[] = $append;
         }
         return $data;
-    }
-
-    /**
-     * @param int $days
-     */
-    public function setDays(int $days): void
-    {
-        $this->days = $days;
     }
 }

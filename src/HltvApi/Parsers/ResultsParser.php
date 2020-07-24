@@ -27,10 +27,10 @@ class ResultsParser extends Parser
             $type = $this->getType(trim($item->find('.map-text', 0)->plaintext));
             $team1 = trim($item->find('.team-cell', 0)->plaintext);
             $team2 = trim($item->find('.team-cell', 1)->plaintext);
-            $event = trim(trim($item->find('.event-name', 0)->plaintext));
+            $event = trim($item->find('.event-name', 0)->plaintext);
             $append = [
                 'id' => $id,
-                'status' => Match::STATUS_UPCOMING,
+                'status' => Match::STATUS_PASSED,
                 'team1' => $team1,
                 'team2' => $team2,
                 'url' => $url,

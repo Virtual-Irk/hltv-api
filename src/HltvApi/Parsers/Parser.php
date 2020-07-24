@@ -11,6 +11,18 @@ use Sunra\PhpSimple\HtmlDomParser;
  */
 abstract class Parser
 {
+    //todo: move the settings to the config-file
+    const DAY_WRAPPER = '.upcomingMatchesSection';
+    const MATCH_UPCOMING_WRAPPER = '.upcomingMatch';
+    const MATCH_ONGOING_WRAPPER = '.liveMatches .liveMatch .a-reset';
+    const MATCH_URL_WRAPPER = '.a-reset';
+    const MATCH_URL_ATTRIBUTE = 'href';
+    const MATCH_TYPE_WRAPPER = '.matchMeta';
+    const MATCH_TEAM_NAME_WRAPPER = '.matchTeamName';
+    const MATCH_EVENT_NAME_WRAPPER = '.matchEventName';
+    const MATCH_TIME_WRAPPER = '.matchTime';
+    const MATCH_TIME_ATTRIBUTE = 'data-unix';
+
     /**
      * @var array
      */
