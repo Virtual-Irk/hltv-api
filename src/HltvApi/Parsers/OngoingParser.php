@@ -21,17 +21,7 @@ class OngoingParser extends Parser
         $data = [];
         /** @var simple_html_dom_node[] $items */
         foreach ($items as $item) {
-            $url = $item->getAttribute('href');
-            $id = $this->getId($url);
-            $append = [
-                'id' => $id,
-                'status' => Match::STATUS_ONGOING,
-                'team1' => trim($item->find(self::MATCH_TEAM_NAME_WRAPPER, 0)->plaintext),
-                'team2' => trim($item->find(self::MATCH_TEAM_NAME_WRAPPER, 1)->plaintext),
-                'url' => $url,
-                'type' => $this->getType(trim($item->find(self::MATCH_TYPE_WRAPPER, 0)->plaintext)),
-            ];
-            $data[] = $append;
+            $data[] = $this->fillMatchDataArray($item, Match::STATUS_ONGOING);
         }
         return $data;
     }

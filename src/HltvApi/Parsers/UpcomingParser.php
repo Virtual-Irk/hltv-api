@@ -51,19 +51,7 @@ class UpcomingParser extends Parser
         $data = [];
         /** @var simple_html_dom_node[] $items */
         foreach ($items as $item) {
-            $url = $item->find(self::MATCH_URL_WRAPPER, 0)->getAttribute(self::MATCH_URL_ATTRIBUTE);
-            $id = $this->getId($url);
-            $append = [
-                'id' => $id,
-                'status' => Match::STATUS_UPCOMING,
-                'team1' => trim($item->find(self::MATCH_TEAM_NAME_WRAPPER, 0)->plaintext),
-                'team2' => trim($item->find(self::MATCH_TEAM_NAME_WRAPPER, 1)->plaintext),
-                'url' => $url,
-                'type' => $this->getType(trim($item->find(self::MATCH_TYPE_WRAPPER, 0)->plaintext)),
-                'event' => trim($item->find(self::MATCH_EVENT_NAME_WRAPPER, 0)->plaintext),
-                'timestamp' => ((int)$item->find(self::MATCH_TIME_WRAPPER, 0)->getAttribute(self::MATCH_TIME_ATTRIBUTE) / 1000),
-            ];
-            $data[] = $append;
+            $data[] = $this->fillMatchDataArray($item, Match::STATUS_UPCOMING);
         }
         return $data;
     }

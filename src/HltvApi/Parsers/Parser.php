@@ -3,6 +3,7 @@
 namespace HltvApi\Parsers;
 
 use HltvApi\Entity\Match;
+use simplehtmldom_1_5\simple_html_dom_node;
 use Sunra\PhpSimple\HtmlDomParser;
 
 /**
@@ -106,5 +107,36 @@ abstract class Parser
         }
 
         return $lt;
+    }
+
+    /**
+     * @param simple_html_dom_node $item
+     * @param int $status
+     * @return array
+     */
+    public function fillMatchDataArray(simple_html_dom_node $item, int $status): array
+    {
+        switch ($status) {
+            case Match::STATUS_ONGOING:
+                $url = $item->getAttribute(self::MATCH_URL_ATTRIBUTE);
+                break;
+            case Match::STATUS_UPCOMING:
+                $url = $item->find(self::MATCH_URL_WRAPPER, 0)->getAttribute(self::MATCH_URL_ATTRIBUTE);
+                break;
+            default:
+                return [];
+                break;
+        }
+
+        return [
+            'id' => $this->getId($url),
+            'status' => $status,
+            'team1' => trim($item->find(self::MATCH_TEAM_NAME_WRAPPER, 0)->plaintext),
+            'team2' => trim($item->find(self::MATCH_TEAM_NAME_WRAPPER, 1)->plaintext),
+            'url' => $url,
+            'type' => $this->getType(trim($item->find(self::MATCH_TYPE_WRAPPER, 0)->plaintext)),
+            'event' => trim($item->find(self::MATCH_EVENT_NAME_WRAPPER, 0)->plaintext),
+            'timestamp' => ((int)$item->find(self::MATCH_TIME_WRAPPER, 0)->getAttribute(self::MATCH_TIME_ATTRIBUTE) / 1000),
+        ];
     }
 }
