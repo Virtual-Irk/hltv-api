@@ -106,4 +106,14 @@ class MatchDetails extends Match
     {
         return $this->getValue('time_start') == self::IS_OVER;
     }
+
+    public function getTeam1WinPercent(): ?float
+    {
+        return $this->getValue('win_percent_team_1');
+    }
+
+    public function getTeam2WinPercent(): ?float
+    {
+        return $this->getValue('win_percent_team_2');
+    }
 }

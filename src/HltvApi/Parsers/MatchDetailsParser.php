@@ -53,9 +53,21 @@ class MatchDetailsParser extends Parser
 
         }
 
+        $hhBlock = $this->data->find('.head-to-head', 0);
+        if ($hhBlock) {
+            $team1Wins = (int)$hhBlock->find('div.bold', 0)->plaintext;
+            $team2Wins = (int)$hhBlock->find('div.bold', 1)->plaintext;
+            $totalMatches = $team1Wins + $team2Wins;
+            $oneMatchWinPercent = ($totalMatches > 0) ? 100 / $totalMatches : 0;
+            $winPercentTeam1 = round($oneMatchWinPercent * $team1Wins, 2);
+            $winPercentTeam2 = round($oneMatchWinPercent * $team2Wins, 2);
+        }
+
         $result = [
             'odds' => [$odds1, $odds2],
-            'time_start' => $time
+            'time_start' => $time,
+            'win_percent_team_1' => $winPercentTeam1,
+            'win_percent_team_2' => $winPercentTeam2,
         ];
 
         return array_merge($result, $mapsResult, $mapsNames);
