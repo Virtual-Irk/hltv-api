@@ -43,12 +43,10 @@ class MatchDetailsParser extends Parser
             $mapsNames["map{$mapN}name"] = $name;
 
             if ($map->find('.results', 0)) {
-                $resultLeft = $map->find('.results-left .results-team-score', 0)->plaintext;
-                $resultRight = $map->find('.results-right .results-team-score', 0)->plaintext;
-                $resultLeft = trim($resultLeft);
-                $resultRight = trim($resultRight);
-                $mapsResult["map{$mapN}score1"] = $resultLeft;
-                $mapsResult["map{$mapN}score2"] = $resultRight;
+                $mapsResult["map{$mapN}pikedByTeam1"] = !is_null($map->getElementByTagName('div.pick'));
+                $mapsResult["map{$mapN}pikedByTeam2"] = !is_null($map->getElementByTagName('span.pick'));
+                $mapsResult["map{$mapN}score1"] = trim($map->find('.results-left .results-team-score', 0)->plaintext);
+                $mapsResult["map{$mapN}score2"] = trim($map->find('.results-right .results-team-score', 0)->plaintext);
             }
 
         }
@@ -61,6 +59,8 @@ class MatchDetailsParser extends Parser
             $oneMatchWinPercent = ($totalMatches > 0) ? 100 / $totalMatches : 0;
             $winPercentTeam1 = round($oneMatchWinPercent * $team1Wins, 2);
             $winPercentTeam2 = round($oneMatchWinPercent * $team2Wins, 2);
+        } else {
+            $winPercentTeam1 = $winPercentTeam2 = 0;
         }
 
         $result = [

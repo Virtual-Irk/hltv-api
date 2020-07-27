@@ -116,4 +116,16 @@ class MatchDetails extends Match
     {
         return $this->getValue('win_percent_team_2');
     }
+
+    public function getTeamNumberPickedTheMap(int $mapNumber): ?int
+    {
+        $teamNumber = null;
+        if ($this->getValue("map{$mapNumber}pikedByTeam1")) {
+            $teamNumber = 1;
+        }
+        if ($this->getValue("map{$mapNumber}pikedByTeam2")) {
+            $teamNumber = 2;
+        }
+        return $teamNumber;
+    }
 }
