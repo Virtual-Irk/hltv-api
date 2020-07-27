@@ -28,7 +28,7 @@
     "php": ">=7.4",
     "ext-curl": "*",
     "guzzlehttp/guzzle": "~6.0",
-    "sunra/php-simple-html-dom-parser": "dev-master"
+    "virtual-irk/php-simple-html-dom-parser": "dev-master"
   },
   "require-dev": {
     "phpunit/phpunit": "~5.0",
