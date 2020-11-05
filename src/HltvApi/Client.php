@@ -1,6 +1,7 @@
 <?php
 namespace HltvApi;
 
+use Exception;
 use HltvApi\Entity\Entity;
 use HltvApi\Entity\Match;
 use HltvApi\Entity\MatchDetails;
@@ -38,15 +39,20 @@ class Client implements Request
      */
     protected $baseUrl;
 
+    /** @var Config */
+    protected $config;
+
     /**
      * Client constructor.
+     * @param string $configPath
      * @param array $proxy
-     * @param $baseUrl
+     * @param string|null $baseUrl
      */
-    public function __construct(array $proxy = [], $baseUrl = null)
+    public function __construct(string $configPath, array $proxy = [], string $baseUrl = null)
     {
         $this->proxyList = $proxy;
         $this->baseUrl = $baseUrl ?? self::BASE_URL;
+        $this->config = new Config($configPath);
     }
 
     /**
@@ -127,13 +133,13 @@ class Client implements Request
     public function createDataParser(string $type, string $url) : Parser
     {
         if (!class_exists($type)) {
-            throw new \Exception('The requested type of parser is not exists');
+            throw new Exception('The requested type of parser is not exists');
         }
         if (!is_subclass_of($type , Parser::class)) {
-            throw new \Exception('The requested parser should be children of Parser::class');
+            throw new Exception('The requested parser should be children of Parser::class');
         }
 
-        return (new $type($this->sendRequest($url)));
+        return (new $type($this->sendRequest($url), $this->config));
     }
 
     /**

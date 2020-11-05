@@ -1,6 +1,6 @@
 <?php
-namespace HltvApi\Entity;
 
+namespace HltvApi\Entity;
 
 /**
  * Class Match
@@ -8,10 +8,9 @@ namespace HltvApi\Entity;
  */
 class Match extends Entity
 {
-
-    const STATUS_UPCOMING   = 1;
-    const STATUS_ONGOING    = 2;
-    const STATUS_PASSED     = 3;
+    const STATUS_UPCOMING = 1;
+    const STATUS_ONGOING = 2;
+    const STATUS_PASSED = 3;
 
     const TYPE_UNDEFINED = -1;
     const TYPE_BO1 = 1;
@@ -24,15 +23,15 @@ class Match extends Entity
     /**
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
-        return $this->getValue('id');
+        return (int)$this->getValue('id');
     }
 
     /**
      * @return string
      */
-    public function getTeam1()
+    public function getTeam1(): string
     {
         return $this->getValue('team1');
     }
@@ -40,7 +39,7 @@ class Match extends Entity
     /**
      * @return string
      */
-    public function getTeam2()
+    public function getTeam2(): string
     {
         return $this->getValue('team2');
     }
@@ -48,7 +47,7 @@ class Match extends Entity
     /**
      * @return string
      */
-    public function getMatchUrl()
+    public function getMatchUrl(): string
     {
         return $this->getValue('url');
     }
@@ -56,7 +55,7 @@ class Match extends Entity
     /**
      * @return string
      */
-    public function getEvent()
+    public function getEvent(): string
     {
         return $this->getValue('event');
     }
@@ -64,7 +63,7 @@ class Match extends Entity
     /**
      * @return int
      */
-    public function getStatus()
+    public function getStatus(): string
     {
         return $this->getValue('status');
     }
@@ -72,7 +71,7 @@ class Match extends Entity
     /**
      * @return int
      */
-    public function getWinner()
+    public function getWinner(): int
     {
         return $this->getValue('winner');
     }
@@ -80,24 +79,24 @@ class Match extends Entity
     /**
      * @return array
      */
-    public function getResult()
+    public function getResult(): array
     {
         return $this->getValue('result');
     }
 
     /**
-     * @return string
+     * @return int
      */
-    public function getTimestamp()
+    public function getTimestamp(): int
     {
-        return $this->getValue('timestamp');
+        return (int)$this->getValue('timestamp');
     }
 
     /**
      * @return Entity|MatchDetails
      * @throws \Exception
      */
-    public function details() : MatchDetails
+    public function details(): MatchDetails
     {
         return $this->details ?? $this->details = $this->client->matchDetails($this->getMatchUrl());
     }

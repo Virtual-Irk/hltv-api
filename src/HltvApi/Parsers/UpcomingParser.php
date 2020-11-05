@@ -1,7 +1,8 @@
 <?php
+
 namespace HltvApi\Parsers;
 
-
+use Exception;
 use HltvApi\Entity\Match;
 use simplehtmldom_1_5\simple_html_dom_node;
 
@@ -11,37 +12,52 @@ use simplehtmldom_1_5\simple_html_dom_node;
  */
 class UpcomingParser extends Parser
 {
-
     protected $days = 1;
 
     /**
      * Parse implementation of Parser class. Should returning a rows of match data
      * @throws \Exception
      */
-    public function parse() : array
+    public function parse(): array
     {
         if(!$this->days) {
-            throw new \Exception('UpcomingParser expect integer count of days more then 0');
+            throw new Exception('UpcomingParser expect integer count of days more then 0');
         }
 
         $idx = 0;
         $items = [];
         while ($idx < $this->days) {
             $idx++;
-            $day = $this->data->find('.upcoming-matches .match-day',0);
-            $items = array_merge($items, $day->find(' .upcoming-match'));
+            $day = $this->data->find($this->config->getUpcomingMatchesContainer(), 0);
+            if (!is_null($day)) {
+                $items = array_merge($items, $day->find($this->config->getUpcomingMatchContainer()));
+            }
         }
 
         $data = [];
         /** @var simple_html_dom_node[] $items */
-        foreach ($items as $item){
-            $url = $item->find('.a-reset', 0)->getAttribute('href');
+        foreach ($items as $item) {
+            $urlContainer = $item->find($this->config->getUpcomingUrlContainer(), 0);
+            if (is_null($urlContainer)) {
+                continue;
+            }
+            $url = $urlContainer->getAttribute($this->config->getAttributeHref());
             $id = $this->getId($url);
-            $type = $this->getType(trim($item->find('.map-text', 0)->plaintext));
-            $team1 = trim($item->find('.team-cell', 0)->plaintext);
-            $team2 = trim($item->find('.team-cell', 1)->plaintext);
-            $event = trim(trim($item->find('.event-name', 0)->plaintext));
-            $timestamp = ((int)$item->find('div.time', 0)->getAttribute('data-unix') / 1000);
+            $matchTypeContainer = $item->find($this->config->getUpcomingMatchTypeContainer(), 0);
+            if (is_null($matchTypeContainer)) {
+                continue;
+            }
+            $type = $this->getType(trim($matchTypeContainer->text()));
+            $team1Container = $item->find($this->config->getUpcomingTeamOneContainer(), 0);
+            $team2Container = $item->find($this->config->getUpcomingTeamTwoContainer(), 0);
+            $eventContainer = $item->find($this->config->getUpcomingEventContainer(), 0);
+            $team1 = !is_null($team1Container) ? trim($team1Container->text()) : '';
+            $team2 = !is_null($team2Container) ? trim($team2Container->text()) : '';
+            $event = !is_null($eventContainer) ? trim($eventContainer->text()) : '';
+
+            $matchTimeContainer = $item->find($this->config->getUpcomingMatchTimeContainer(), 0);
+
+            $timestamp = ((int)$matchTimeContainer->getAttribute($this->config->getAttributeDataUnix()) / 1000);
             $append = [
                 'id' => $id,
                 'status' => Match::STATUS_UPCOMING,

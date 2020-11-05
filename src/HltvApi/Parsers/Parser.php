@@ -3,6 +3,7 @@
 namespace HltvApi\Parsers;
 
 
+use HltvApi\Config;
 use HltvApi\Entity\Match;
 use Sunra\PhpSimple\HtmlDomParser;
 
@@ -18,22 +19,28 @@ abstract class Parser
     protected $data;
 
     /**
+     * @var Config
+     */
+    protected $config;
+
+    /**
      * Parser constructor.
      * @param string $data
+     * @param Config $config
      */
-    public function __construct(string $data)
+    public function __construct(string $data, Config $config)
     {
-        if(!$data) {
+        if (!$data) {
             $this->data = [];
             return;
         }
         // look for vendor/sunra/php-simple-html-dom-parser/Src/Sunra/PhpSimple/simplehtmldom_1_5/simple_html_dom.php
         // parser required global limit const
-        if (!defined('MAX_FILE_SIZE'))
-        {
+        if (!defined('MAX_FILE_SIZE')) {
             define('MAX_FILE_SIZE', 6000000);
         }
-        $this->data = HtmlDomParser::str_get_html( $data );
+        $this->data = HtmlDomParser::str_get_html($data);
+        $this->config = $config;
     }
 
     /**
@@ -44,9 +51,9 @@ abstract class Parser
     /**
      * @param string $data
      */
-    public function setData(string $data) : void
+    public function setData(string $data): void
     {
-        $this->data = HtmlDomParser::str_get_html( $data );
+        $this->data = HtmlDomParser::str_get_html($data);
     }
 
     /**
@@ -58,7 +65,7 @@ abstract class Parser
     public function getId($var)
     {
         $attr = explode("/", $var);
-        return isset($attr[2]) ? $attr[2] : null ;
+        return isset($attr[2]) ? $attr[2] : null;
     }
 
     /**
