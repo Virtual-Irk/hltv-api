@@ -1,4 +1,5 @@
 <?php
+
 namespace HltvApi;
 
 use Exception;
@@ -58,7 +59,7 @@ class Client implements Request
     /**
      * @return string
      */
-    public function getUrlMatches() : string
+    public function getUrlMatches(): string
     {
         return $this->baseUrl . '/matches';
     }
@@ -66,7 +67,7 @@ class Client implements Request
     /**
      * @return string
      */
-    public function getUrlResults() : string
+    public function getUrlResults(): string
     {
         return $this->baseUrl . '/results';
     }
@@ -75,7 +76,7 @@ class Client implements Request
      * @param $link
      * @return string
      */
-    public function getUrlDetails($link) : string
+    public function getUrlDetails($link): string
     {
         return $this->baseUrl . $link;
     }
@@ -85,11 +86,13 @@ class Client implements Request
      */
     public function createProxy()
     {
-        if(!count($this->proxyList)) {
+        if (!count($this->proxyList)) {
             return null;
         }
+
         $idx = count($this->proxyList) - 1;
         $idx = rand(0, $idx);
+
         return new Proxy($this->proxyList[$idx]);
     }
 
@@ -98,26 +101,25 @@ class Client implements Request
      * @param string $method
      * @return string
      */
-    public function sendRequest($url = null, $method = 'GET') : string
+    public function sendRequest($url = null, $method = 'GET'): string
     {
         $result = '';
-        if( $ch = curl_init ())
-        {
+        if ($ch = curl_init()) {
             $proxy = $this->createProxy();
-            curl_setopt ($ch, CURLOPT_URL, $url);
-            curl_setopt ($ch, CURLOPT_MAXREDIRS, 10);
-            curl_setopt ($ch, CURLOPT_TIMEOUT, 180);
-            if($proxy) {
-                curl_setopt ($ch, CURLOPT_PROXY, "{$proxy->ip()}:{$proxy->port()}");
-                curl_setopt ($ch, CURLOPT_PROXYTYPE, $proxy->type());
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_MAXREDIRS, 10);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 180);
+            if ($proxy) {
+                curl_setopt($ch, CURLOPT_PROXY, "{$proxy->ip()}:{$proxy->port()}");
+                curl_setopt($ch, CURLOPT_PROXYTYPE, $proxy->type());
             }
-            curl_setopt ($ch, CURLOPT_RETURNTRANSFER, TRUE);
-            curl_setopt ($ch, CURLOPT_FAILONERROR, true);
-            curl_setopt ($ch, CURLOPT_FOLLOWLOCATION, 1);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+            curl_setopt($ch, CURLOPT_FAILONERROR, true);
+            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
             $result = curl_exec($ch);
-            curl_close ($ch);
+            curl_close($ch);
         }
-        if(!$result && is_array($this->proxyList) && count($this->proxyList)) {
+        if (!$result && is_array($this->proxyList) && count($this->proxyList)) {
             return $this->sendRequest($url, $method);
         }
         return $result;
@@ -130,7 +132,7 @@ class Client implements Request
      * @return Parser
      * @throws \Exception
      */
-    public function createDataParser(string $type, string $url) : Parser
+    public function createDataParser(string $type, string $url): Parser
     {
         if (!class_exists($type)) {
             throw new Exception('The requested type of parser is not exists');
@@ -147,7 +149,7 @@ class Client implements Request
      * @return Match[]|array|null
      * @throws \Exception
      */
-    public function ongoing() : array
+    public function ongoing(): array
     {
         $parser = $this->createDataParser(OngoingParser::class, $this->getUrlMatches());
         return (new BaseWrapper(Match::class, $parser->parse(), $this))->fetchList();
@@ -160,7 +162,7 @@ class Client implements Request
      * @return Match[]|array|null
      * @throws \Exception
      */
-    public function upcoming($days = 2) : array
+    public function upcoming($days = 2): array
     {
         /** @var UpcomingParser $parser */
         $parser = $this->createDataParser(UpcomingParser::class, $this->getUrlMatches());
@@ -175,7 +177,7 @@ class Client implements Request
      * @return Match[]|array|null
      * @throws \Exception
      */
-    public function results() : array
+    public function results(): array
     {
         $parser = $this->createDataParser(ResultsParser::class, $this->getUrlResults());
         return (new BaseWrapper(Match::class, $parser->parse(), $this))->fetchList();
@@ -186,11 +188,9 @@ class Client implements Request
      * @return MatchDetails|Entity
      * @throws \Exception
      */
-    public function matchDetails(string $link) : Entity
+    public function matchDetails(string $link): Entity
     {
         $parser = $this->createDataParser(MatchDetailsParser::class, $this->getUrlDetails($link));
         return (new BaseWrapper(MatchDetails::class, $parser->parse(), $this))->fetchRow();
     }
-
-
 }

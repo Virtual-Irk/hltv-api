@@ -1,4 +1,5 @@
 <?php
+
 namespace HltvApi\Entity;
 
 /**
@@ -7,7 +8,6 @@ namespace HltvApi\Entity;
  */
 class MatchDetails extends Match
 {
-
     const IS_LIVE = 'LIVE';
     const IS_OVER = 'Match over';
     const IS_POSTPONED = 'Match postponed';
@@ -16,39 +16,39 @@ class MatchDetails extends Match
      * Getting a match -up type, declared in parent entity Match
      * @return null|int
      */
-    public function getType()
+    public function getType(): ?int
     {
-        return $this->getValue('type');
+        return parent::getType();
     }
 
     /**
      * Getting unix timestamp of match time
      * @return null|int
      */
-    public function getMatchTimeStart()
+    public function getMatchTimeStart(): ?int
     {
-        return $this->getValue('time_start');
+        return (int)$this->getValue('time_start') ?? null;
     }
 
     /**
-     * @return null
+     * @return array|null
      */
-    public function getOdds()
+    public function getOdds(): ?array
     {
         return $this->getValue('odds');
     }
 
     /**
      * @param int $map
-     * @return null
+     * @return bool
      */
-    public function getMapStarted(int $map)
+    public function getMapStarted(int $map): bool
     {
         $score1 = $this->getValue("map{$map}score1", 0);
         $score2 = $this->getValue("map{$map}score2", 0);
         if ($map > 1) {
             $map = $map - 1;
-            if($this->getMapResults($map)) {
+            if ($this->getMapResults($map)) {
                 return true;
             }
         }
@@ -57,15 +57,15 @@ class MatchDetails extends Match
 
     /**
      * @param int $map
-     * @return array | null
+     * @return array|null
      */
-    public function getMapResults(int $map)
+    public function getMapResults(int $map): ?array
     {
         $score1 = $this->getValue("map{$map}score1", 0);
         $score2 = $this->getValue("map{$map}score2", 0);
 
-        if((($score1 != $score2) && ($score1 > 15 || $score2 > 15))
-            || (($score1 + $score2 > 30) && abs($score1 - $score2) > 3)){
+        if ((($score1 != $score2) && ($score1 > 15 || $score2 > 15))
+            || (($score1 + $score2 > 30) && abs($score1 - $score2) > 3)) {
             return [$score1, $score2];
         }
         return null;
@@ -75,7 +75,7 @@ class MatchDetails extends Match
      * @param int $map
      * @return array
      */
-    public function getMapScore(int $map)
+    public function getMapScore(int $map): array
     {
         $score1 = $this->getValue("map{$map}score1", 0);
         $score2 = $this->getValue("map{$map}score2", 0);
@@ -84,17 +84,17 @@ class MatchDetails extends Match
 
     /**
      * @param int $map
-     * @return string
+     * @return string|null
      */
-    public function getMapName(int $map)
+    public function getMapName(int $map): ?string
     {
-        return $this->getValue("map{$map}name");
+        return $this->getValue("map{$map}name") ?? null;
     }
 
     /**
      * @return boolean
      */
-    public function getMatchIsLive()
+    public function getMatchIsLive(): bool
     {
         return $this->getValue('time_start') == self::IS_LIVE;
     }
@@ -102,8 +102,30 @@ class MatchDetails extends Match
     /**
      * @return boolean
      */
-    public function getMatchIsOver() : bool
+    public function getMatchIsOver(): bool
     {
         return $this->getValue('time_start') == self::IS_OVER;
+    }
+
+    public function getTeam1WinPercent(): ?float
+    {
+        return $this->getValue('win_percent_team_1');
+    }
+
+    public function getTeam2WinPercent(): ?float
+    {
+        return $this->getValue('win_percent_team_2');
+    }
+
+    public function getTeamNumberPickedTheMap(int $mapNumber): ?int
+    {
+        $teamNumber = null;
+        if ($this->getValue("map{$mapNumber}pikedByTeam1")) {
+            $teamNumber = 1;
+        }
+        if ($this->getValue("map{$mapNumber}pikedByTeam2")) {
+            $teamNumber = 2;
+        }
+        return $teamNumber;
     }
 }

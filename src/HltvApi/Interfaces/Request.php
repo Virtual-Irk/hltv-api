@@ -1,8 +1,8 @@
 <?php
-namespace HltvApi\Interfaces;
 
+namespace HltvApi\Interfaces;
 
 interface Request
 {
-    public function sendRequest() : string;
+    public function sendRequest(): string;
 }

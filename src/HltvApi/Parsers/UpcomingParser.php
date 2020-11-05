@@ -1,5 +1,4 @@
 <?php
-
 namespace HltvApi\Parsers;
 
 use Exception;
@@ -18,7 +17,7 @@ class UpcomingParser extends Parser
      * Parse implementation of Parser class. Should returning a rows of match data
      * @throws \Exception
      */
-    public function parse(): array
+    public function parse() : array
     {
         if(!$this->days) {
             throw new Exception('UpcomingParser expect integer count of days more then 0');

@@ -12,11 +12,25 @@ class Match extends Entity
     const STATUS_ONGOING = 2;
     const STATUS_PASSED = 3;
 
+    const STATUS_NAME = [
+        self::STATUS_UPCOMING => 'upcoming',
+        self::STATUS_ONGOING => 'ongoing',
+        self::STATUS_PASSED => 'passed',
+    ];
+
     const TYPE_UNDEFINED = -1;
     const TYPE_BO1 = 1;
     const TYPE_BO2 = 2;
     const TYPE_BO3 = 3;
     const TYPE_BO5 = 4;
+
+    const TYPE_NAME = [
+        self::TYPE_UNDEFINED => 'undefined',
+        self::TYPE_BO1 => 'bo1',
+        self::TYPE_BO2 => 'bo2',
+        self::TYPE_BO3 => 'bo3',
+        self::TYPE_BO5 => 'bo5',
+    ];
 
     protected $details;
 

@@ -1,7 +1,9 @@
 <?php
+
 namespace HltvApi\Wrappers;
 
 use HltvApi\Entity\Entity;
+
 /**
  * Class BaseWrapper
  * @package HltvApi\Wrappers
@@ -11,9 +13,9 @@ class BaseWrapper extends Wrapper
     /**
      * @return array
      */
-    public function fetchList() : array
+    public function fetchList(): array
     {
-        if(!is_array($this->data) || !count($this->data)) {
+        if (!is_array($this->data) || !count($this->data)) {
             return [];
         }
         $result = [];
@@ -27,7 +29,7 @@ class BaseWrapper extends Wrapper
     /**
      * @return Entity
      */
-    public function fetchRow() : Entity
+    public function fetchRow(): Entity
     {
         $class = $this->entityType;
         return new $class($this->data, $this->client);

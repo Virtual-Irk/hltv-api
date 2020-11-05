@@ -1,7 +1,9 @@
 <?php
+
 namespace HltvApi\Wrappers;
 
 use HltvApi\Client;
+
 /**
  * Class Wrapper
  * @package HltvApi\Wrappers
@@ -28,7 +30,7 @@ abstract class Wrapper
      * @param array $data
      * @param Client $client
      */
-    public function __construct(string  $entityType, array $data, Client $client )
+    public function __construct(string $entityType, array $data, Client $client)
     {
         $this->entityType = $entityType;
         $this->data = $data;
