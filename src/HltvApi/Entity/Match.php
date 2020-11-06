@@ -61,7 +61,7 @@ class Match extends Entity
     /**
      * @return string
      */
-    public function getMatchUrl(): string
+    public function getUrl(): string
     {
         return $this->getValue('url');
     }
@@ -120,6 +120,6 @@ class Match extends Entity
      */
     public function details(): MatchDetails
     {
-        return $this->details ?? $this->details = $this->client->matchDetails($this->getMatchUrl());
+        return $this->details ?? $this->details = $this->client->getMatchDetails($this->getUrl());
     }
 }

@@ -14,9 +14,9 @@ class MatchDetails extends Match
 
     /**
      * Getting a match -up type, declared in parent entity Match
-     * @return null|int
+     * @return int
      */
-    public function getType(): ?int
+    public function getType(): int
     {
         return parent::getType();
     }

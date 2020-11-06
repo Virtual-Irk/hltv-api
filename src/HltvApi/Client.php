@@ -188,7 +188,7 @@ class Client implements Request
      * @return MatchDetails|Entity
      * @throws \Exception
      */
-    public function matchDetails(string $link): Entity
+    public function getMatchDetails(string $link): Entity
     {
         $parser = $this->createDataParser(MatchDetailsParser::class, $this->getUrlDetails($link));
         return (new BaseWrapper(MatchDetails::class, $parser->parse(), $this))->fetchRow();
