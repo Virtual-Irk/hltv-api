@@ -9,12 +9,12 @@ namespace HltvApi\Entity;
 class Match extends Entity
 {
     const STATUS_UPCOMING = 1;
-    const STATUS_ONGOING = 2;
+    const STATUS_LIVE = 2;
     const STATUS_PASSED = 3;
 
     const STATUS_NAME = [
         self::STATUS_UPCOMING => 'upcoming',
-        self::STATUS_ONGOING => 'ongoing',
+        self::STATUS_LIVE => 'live',
         self::STATUS_PASSED => 'passed',
     ];
 
@@ -85,7 +85,7 @@ class Match extends Entity
     /**
      * @return int
      */
-    public function getWinner(): int
+    public function getWinner(): ?int
     {
         return $this->getValue('winner');
     }
@@ -93,7 +93,7 @@ class Match extends Entity
     /**
      * @return array
      */
-    public function getResult(): array
+    public function getResult(): ?array
     {
         return $this->getValue('result');
     }
@@ -104,6 +104,14 @@ class Match extends Entity
     public function getTimestamp(): int
     {
         return (int)$this->getValue('timestamp');
+    }
+
+    /**
+     * @return int
+     */
+    public function getType(): int
+    {
+        return (int)$this->getValue('type');
     }
 
     /**

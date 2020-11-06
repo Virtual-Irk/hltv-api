@@ -18,12 +18,6 @@
       "homepage": "https://github.com/virtual-irk"
     }
   ],
-  "repositories": [
-    {
-      "type": "vcs",
-      "url": "https://github.com/virtual-irk/php-simple-html-dom-parser"
-    }
-  ],
   "require": {
     "php": ">=7.1",
     "ext-curl": "*",

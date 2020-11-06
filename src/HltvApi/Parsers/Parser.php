@@ -116,9 +116,7 @@ abstract class Parser
         $data = [];
         foreach ($items as $item) {
             switch ($status) {
-                case Match::STATUS_ONGOING:
-                    $url = trim($item->getAttribute($this->config->getAttributeHref()));
-                    break;
+                case Match::STATUS_LIVE:
                 case Match::STATUS_UPCOMING:
                     $url = trim($item->find($this->config->getMatchUrlContainer(), 0)->getAttribute($this->config->getAttributeHref()));
                     break;

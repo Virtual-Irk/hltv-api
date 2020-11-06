@@ -1,7 +1,6 @@
 <?php
 
-namespace tests\Entity;
-
+namespace Tests\Entity;
 
 use HltvApi\Client;
 use HltvApi\Entity\Match;
@@ -14,6 +13,8 @@ use PHPUnit\Framework\TestCase;
 class MatchTest extends TestCase
 {
     /**
+     * @param array $data
+     * @param array $expected
      * @dataProvider additionalData
      */
     public function testMatchEntity(array $data, array $expected)

@@ -27,9 +27,9 @@ class Config
         return isset($this->config['attributes']['href']) ? $this->config['attributes']['href'] : null;
     }
 
-    public function getMatchBaseContainer(): ?string
+    public function getLiveMatchesContainer(): ?string
     {
-        return isset($this->config['match']['baseContainer']) ? $this->config['match']['baseContainer'] : null;
+        return isset($this->config['live']['matchesContainer']) ? $this->config['live']['matchesContainer'] : null;
     }
 
     public function getMatchEventContainer(): ?string
@@ -55,6 +55,11 @@ class Config
     public function getMatchUrlContainer(): ?string
     {
         return isset($this->config['match']['urlContainer']) ? $this->config['match']['urlContainer'] : null;
+    }
+
+    public function getUpcomingMatchesContainer(): ?string
+    {
+        return isset($this->config['upcoming']['matchesContainer']) ? $this->config['upcoming']['matchesContainer'] : null;
     }
 
     public function getUpcomingMatchContainer(): ?string

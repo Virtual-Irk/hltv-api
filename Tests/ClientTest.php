@@ -1,9 +1,10 @@
 <?php
-namespace tests;
+
+namespace Tests;
 
 use HltvApi\Client;
 use HltvApi\Entity\Match;
-use HltvApi\Parsers\OngoingParser;
+use HltvApi\Parsers\LiveParser;
 use HltvApi\Parsers\UpcomingParser;
 use PHPUnit\Framework\TestCase;
 
@@ -33,10 +34,10 @@ class ClientTest extends TestCase
     public function parserDataProvider()
     {
         return [
-            [OngoingParser::class, [
+            [LiveParser::class, [
                     [
                         'id' => 2337403,
-                        'status' => Match::STATUS_ONGOING,
+                        'status' => Match::STATUS_LIVE,
                         'team1' => 'fnatic',
                         'team2' => 'Tricked',
                         'url' => '/matches/2337403/fnatic-vs-tricked-ecs-season-8-europe-week-5',

@@ -1,9 +1,8 @@
 <?php
 
-namespace tests\Wrappers;
+namespace Tests\Wrappers;
 
 use HltvApi\Client;
-use HltvApi\Entity\Entity;
 use HltvApi\Entity\Match;
 use HltvApi\Entity\MatchDetails;
 use HltvApi\Wrappers\BaseWrapper;
@@ -43,13 +42,13 @@ class BaseWrapperTest extends TestCase
         return [
             [
                 'class' => MatchDetails::class,
-                'data' => ['id' => 1, 'team1' => 't1','team2' => 't2'],
-                'expected' => new MatchDetails(['id' => 1, 'team1' => 't1','team2' => 't2'], new Client())
+                'data' => ['id' => 1, 'team1' => 't1', 'team2' => 't2'],
+                'expected' => new MatchDetails(['id' => 1, 'team1' => 't1', 'team2' => 't2'], new Client())
             ],
             [
                 'class' => MatchDetails::class,
-                'data' => ['id' => 1, 'team1' => 'G2','team2' => 'Navi'],
-                'expected' => new MatchDetails(['id' => 1, 'team1' => 'G2','team2' => 'Navi'], new Client())
+                'data' => ['id' => 1, 'team1' => 'G2', 'team2' => 'Navi'],
+                'expected' => new MatchDetails(['id' => 1, 'team1' => 'G2', 'team2' => 'Navi'], new Client())
             ],
         ];
     }
@@ -64,12 +63,12 @@ class BaseWrapperTest extends TestCase
             [
                 'class' => Match::class,
                 'data' => [
-                    ['id' => 1, 'team1' => 't1','team2' => 't2'],
-                    ['id' => 2, 'team1' => 'Navi','team2' => 'G2'],
+                    ['id' => 1, 'team1' => 't1', 'team2' => 't2'],
+                    ['id' => 2, 'team1' => 'Navi', 'team2' => 'G2'],
                 ],
                 'expected' => [
-                    new Match(['id' => 1, 'team1' => 't1','team2' => 't2'], new Client()),
-                    new Match(['id' => 2, 'team1' => 'Navi','team2' => 'G2'], new Client()),
+                    new Match(['id' => 1, 'team1' => 't1', 'team2' => 't2'], new Client()),
+                    new Match(['id' => 2, 'team1' => 'Navi', 'team2' => 'G2'], new Client()),
                 ]
             ],
         ];

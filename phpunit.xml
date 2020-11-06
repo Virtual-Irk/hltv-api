@@ -15,8 +15,8 @@
         verbose="false">
             <testsuites>
                 <testsuite name="unit">
-                    <directory>tests</directory>
-                    <directory>tests/*/*Test.php</directory>
+                    <directory>Tests</directory>
+                    <directory>Tests/*/*Test.php</directory>
                 </testsuite>
             </testsuites>
         </phpunit>

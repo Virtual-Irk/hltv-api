@@ -8,7 +8,7 @@ use HltvApi\Entity\Match;
 use HltvApi\Entity\MatchDetails;
 use HltvApi\Interfaces\Request;
 use HltvApi\Parsers\MatchDetailsParser;
-use HltvApi\Parsers\OngoingParser;
+use HltvApi\Parsers\LiveParser;
 use HltvApi\Parsers\Parser;
 use HltvApi\Parsers\ResultsParser;
 use HltvApi\Parsers\UpcomingParser;
@@ -145,13 +145,13 @@ class Client implements Request
     }
 
     /**
-     * Getting an ongoing list of Match objects
+     * Getting an live list of Match objects
      * @return Match[]|array|null
-     * @throws \Exception
+     * @throws Exception
      */
-    public function ongoing(): array
+    public function getLiveMatchesList(): array
     {
-        $parser = $this->createDataParser(OngoingParser::class, $this->getUrlMatches());
+        $parser = $this->createDataParser(LiveParser::class, $this->getUrlMatches());
         return (new BaseWrapper(Match::class, $parser->parse(), $this))->fetchList();
     }
 
@@ -162,7 +162,7 @@ class Client implements Request
      * @return Match[]|array|null
      * @throws \Exception
      */
-    public function upcoming($days = 2): array
+    public function getUpcomingMatchesList($days = 2): array
     {
         /** @var UpcomingParser $parser */
         $parser = $this->createDataParser(UpcomingParser::class, $this->getUrlMatches());
