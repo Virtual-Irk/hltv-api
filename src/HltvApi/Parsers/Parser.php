@@ -4,6 +4,7 @@ namespace HltvApi\Parsers;
 
 
 use HltvApi\Config;
+use HltvApi\DataMapper\Event;
 use HltvApi\Entity\Match;
 use simplehtmldom_1_5\simple_html_dom_node;
 use Sunra\PhpSimple\HtmlDomParser;
@@ -125,16 +126,14 @@ abstract class Parser
             }
 
             if (isset($url)) {
-                $data[] = [
-                    'id' => $this->getId($url),
-                    'status' => $status,
-                    'team1' => trim($item->find($this->config->getMatchTeamNameContainer(), 0)->text()),
-                    'team2' => trim($item->find($this->config->getMatchTeamNameContainer(), 1)->text()),
-                    'url' => $url,
-                    'type' => $this->getType(trim($item->find($this->config->getMatchTypeContainer(), 0)->text())),
-                    'event' => trim($item->find($this->config->getMatchEventContainer(), 0)->text()),
-                    'timestamp' => ((int)$item->find($this->config->getMatchTimeContainer(), 0)->getAttribute($this->config->getAttributeDataUnix()) / 1000),
-                ];
+                $id = (int)$this->getId($url);
+                $name = trim($item->find($this->config->getMatchEventContainer(), 0)->text());
+                $firstTeamName = trim($item->find($this->config->getMatchTeamNameContainer(), 0)->text());
+                $secondTeamName = trim($item->find($this->config->getMatchTeamNameContainer(), 1)->text());
+                $type = (int)$this->getType(trim($item->find($this->config->getMatchTypeContainer(), 0)->text()));
+                $timestamp = (int)($item->find($this->config->getMatchTimeContainer(), 0)->getAttribute($this->config->getAttributeDataUnix()) / 1000);
+
+                $data[] = new Event($id, $name, $url, $firstTeamName, $secondTeamName, $status, $type, $timestamp);
             }
         }
 

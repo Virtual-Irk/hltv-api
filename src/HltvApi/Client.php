@@ -3,6 +3,7 @@
 namespace HltvApi;
 
 use Exception;
+use HltvApi\DataMapper\Event;
 use HltvApi\Entity\Entity;
 use HltvApi\Entity\Match;
 use HltvApi\Entity\MatchDetails;
@@ -137,7 +138,7 @@ class Client implements Request
         if (!class_exists($type)) {
             throw new Exception('The requested type of parser is not exists');
         }
-        if (!is_subclass_of($type , Parser::class)) {
+        if (!is_subclass_of($type, Parser::class)) {
             throw new Exception('The requested parser should be children of Parser::class');
         }
 
@@ -156,24 +157,23 @@ class Client implements Request
     }
 
     /**
-     * Getting an upcoming list of Match-objects for x days at the scheduler
+     * Getting an upcoming list of Event-objects for x days at the scheduler
      *
      * @param int $days
-     * @return Match[]|array|null
-     * @throws \Exception
+     * @return Event[]
+     * @throws Exception
      */
     public function getUpcomingMatchesList($days = 2): array
     {
         /** @var UpcomingParser $parser */
         $parser = $this->createDataParser(UpcomingParser::class, $this->getUrlMatches());
         $parser->setDays($days);
-        return (new BaseWrapper(Match::class, $parser->parse(), $this))->fetchList();
+        return $parser->parse();
     }
 
     /**
      * Getting a result list of Match-objects
      *
-     * @param int $days
      * @return Match[]|array|null
      * @throws \Exception
      */
