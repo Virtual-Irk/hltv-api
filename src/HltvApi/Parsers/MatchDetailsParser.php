@@ -2,6 +2,11 @@
 
 namespace HltvApi\Parsers;
 
+use Exception;
+use HltvApi\DataMapper\EventDetail;
+use HltvApi\DataMapper\Map;
+use HltvApi\DataMapper\Team;
+
 /**
  * Class MatchDetailsParser
  * @package HltvApi\Parsers
@@ -14,9 +19,36 @@ class MatchDetailsParser extends Parser
 
     /**
      * Parse implementation of Parser base class. Should returning a row of match details data
-     * @throws \Exception
+     * @throws Exception
      */
-    public function parse(): array
+    public function parse()
+    {
+        $teams = $maps = [];
+
+        for ($i = 0; $i < 2; $i++) {
+            $teamName = trim($this->data->find($this->config->getMatchDetailTeamNameContainer(), $i)->text());
+            $teamUrl = trim($this->data->find($this->config->getMatchDetailTeamUrlContainer(), $i)->getAttribute($this->config->getAttributeHref()));
+            $teams[] = new Team($this->getId($teamUrl), $teamName, $i + 1, $teamUrl);
+        }
+
+        $mapMapping = $this->config->getMapMapping();
+        $mapsContainer = $this->data->find($this->config->getMatchDetailMapsContainer());
+        $mapPosition = 1;
+        foreach ($mapsContainer as $i => $map) {
+            $mapName = mb_strtolower(trim($map->find($this->config->getMatchDetailMapNameContainer(), 0)->text()));
+            if (in_array($mapName, array_keys($mapMapping))) {
+                $mapId = $mapMapping[$mapName];
+                $maps[] = new Map($mapId, $mapName, $mapPosition);
+                $mapPosition++;
+            } else {
+                throw new Exception('Unknown map name!');
+            }
+        }
+
+        return new EventDetail($teams, $maps);
+    }
+
+    public function parse2(): array
     {
         foreach (static::ODDS_PROVIDERS as $name) {
 

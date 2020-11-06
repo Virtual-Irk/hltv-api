@@ -32,6 +32,31 @@ class Config
         return isset($this->config['live']['matchesContainer']) ? $this->config['live']['matchesContainer'] : null;
     }
 
+    public function getMapMapping(): ?array
+    {
+        return isset($this->config['mapIds']) ? $this->config['mapIds'] : null;
+    }
+
+    public function getMatchDetailMapsContainer(): ?string
+    {
+        return isset($this->config['matchDetail']['mapsContainer']) ? $this->config['matchDetail']['mapsContainer'] : null;
+    }
+
+    public function getMatchDetailMapNameContainer(): ?string
+    {
+        return isset($this->config['matchDetail']['mapNameContainer']) ? $this->config['matchDetail']['mapNameContainer'] : null;
+    }
+
+    public function getMatchDetailTeamNameContainer(): ?string
+    {
+        return isset($this->config['matchDetail']['teamNameContainer']) ? $this->config['matchDetail']['teamNameContainer'] : null;
+    }
+
+    public function getMatchDetailTeamUrlContainer(): ?string
+    {
+        return isset($this->config['matchDetail']['teamUrlContainer']) ? $this->config['matchDetail']['teamUrlContainer'] : null;
+    }
+
     public function getMatchEventContainer(): ?string
     {
         return isset($this->config['match']['eventContainer']) ? $this->config['match']['eventContainer'] : null;

@@ -4,6 +4,7 @@ namespace HltvApi;
 
 use Exception;
 use HltvApi\DataMapper\Event;
+use HltvApi\DataMapper\EventDetail;
 use HltvApi\Entity\Entity;
 use HltvApi\Entity\Match;
 use HltvApi\Entity\MatchDetails;
@@ -168,6 +169,17 @@ class Client implements Request
         /** @var UpcomingParser $parser */
         $parser = $this->createDataParser(UpcomingParser::class, $this->getUrlMatches());
         $parser->setDays($days);
+        return $parser->parse();
+    }
+
+    /**
+     * @param string $url
+     * @return EventDetail
+     * @throws Exception
+     */
+    public function getEventDetail(string $url): EventDetail
+    {
+        $parser = $this->createDataParser(MatchDetailsParser::class, $this->getUrlDetails($url));
         return $parser->parse();
     }
 
