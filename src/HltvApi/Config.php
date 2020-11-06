@@ -17,19 +17,9 @@ class Config
         $this->config = require $configPath;
     }
 
-    public function getUpcomingMatchesContainer(): ?string
+    public function getAttributeDataUnix(): ?string
     {
-        return isset($this->config['upcoming']['matchesContainer']) ? $this->config['upcoming']['matchesContainer'] : null;
-    }
-
-    public function getUpcomingMatchContainer(): ?string
-    {
-        return isset($this->config['upcoming']['matchContainer']) ? $this->config['upcoming']['matchContainer'] : null;
-    }
-
-    public function getUpcomingUrlContainer(): ?string
-    {
-        return isset($this->config['upcoming']['urlContainer']) ? $this->config['upcoming']['urlContainer'] : null;
+        return isset($this->config['attributes']['dataUnix']) ? $this->config['attributes']['dataUnix'] : null;
     }
 
     public function getAttributeHref(): ?string
@@ -37,33 +27,38 @@ class Config
         return isset($this->config['attributes']['href']) ? $this->config['attributes']['href'] : null;
     }
 
-    public function getAttributeDataUnix(): ?string
+    public function getMatchBaseContainer(): ?string
     {
-        return isset($this->config['attributes']['dataUnix']) ? $this->config['attributes']['dataUnix'] : null;
+        return isset($this->config['match']['baseContainer']) ? $this->config['match']['baseContainer'] : null;
     }
 
-    public function getUpcomingMatchTypeContainer(): ?string
+    public function getMatchEventContainer(): ?string
     {
-        return isset($this->config['upcoming']['matchTypeContainer']) ? $this->config['upcoming']['matchTypeContainer'] : null;
+        return isset($this->config['match']['eventContainer']) ? $this->config['match']['eventContainer'] : null;
     }
 
-    public function getUpcomingTeamOneContainer(): ?string
+    public function getMatchTeamNameContainer(): ?string
     {
-        return isset($this->config['upcoming']['teamOneContainer']) ? $this->config['upcoming']['teamOneContainer'] : null;
+        return isset($this->config['match']['teamNameContainer']) ? $this->config['match']['teamNameContainer'] : null;
     }
 
-    public function getUpcomingTeamTwoContainer(): ?string
+    public function getMatchTimeContainer(): ?string
     {
-        return isset($this->config['upcoming']['teamTwoContainer']) ? $this->config['upcoming']['teamTwoContainer'] : null;
+        return isset($this->config['match']['timeContainer']) ? $this->config['match']['timeContainer'] : null;
     }
 
-    public function getUpcomingEventContainer(): ?string
+    public function getMatchTypeContainer(): ?string
     {
-        return isset($this->config['upcoming']['eventContainer']) ? $this->config['upcoming']['eventContainer'] : null;
+        return isset($this->config['match']['typeContainer']) ? $this->config['match']['typeContainer'] : null;
     }
 
-    public function getUpcomingMatchTimeContainer(): ?string
+    public function getMatchUrlContainer(): ?string
     {
-        return isset($this->config['upcoming']['matchTimeContainer']) ? $this->config['upcoming']['matchTimeContainer'] : null;
+        return isset($this->config['match']['urlContainer']) ? $this->config['match']['urlContainer'] : null;
+    }
+
+    public function getUpcomingMatchContainer(): ?string
+    {
+        return isset($this->config['upcoming']['matchContainer']) ? $this->config['upcoming']['matchContainer'] : null;
     }
 }

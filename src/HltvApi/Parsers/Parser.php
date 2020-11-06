@@ -5,6 +5,7 @@ namespace HltvApi\Parsers;
 
 use HltvApi\Config;
 use HltvApi\Entity\Match;
+use simplehtmldom_1_5\simple_html_dom_node;
 use Sunra\PhpSimple\HtmlDomParser;
 
 /**
@@ -60,12 +61,12 @@ abstract class Parser
      * Internal hltv id using as unique int var per system
      *
      * @param $var
-     * @return null
+     * @return int|null
      */
-    public function getId($var)
+    public function getId($var): ?int
     {
         $attr = explode("/", $var);
-        return isset($attr[2]) ? $attr[2] : null;
+        return isset($attr[2]) ? (int)$attr[2] : null;
     }
 
     /**
@@ -74,7 +75,7 @@ abstract class Parser
      * @param $type
      * @return int|null
      */
-    public function getType($type)
+    public function getType($type): ?int
     {
         $lt = null;
         switch ($type) {
@@ -105,4 +106,41 @@ abstract class Parser
         return $lt;
     }
 
+    /**
+     * @param simple_html_dom_node[]|array $items
+     * @param int $status
+     * @return array
+     */
+    public function fillMatchDataArray(array $items, int $status): array
+    {
+        $data = [];
+        foreach ($items as $item) {
+            switch ($status) {
+                case Match::STATUS_ONGOING:
+                    $url = trim($item->getAttribute($this->config->getAttributeHref()));
+                    break;
+                case Match::STATUS_UPCOMING:
+                    $url = trim($item->find($this->config->getMatchUrlContainer(), 0)->getAttribute($this->config->getAttributeHref()));
+                    break;
+                default:
+                    continue;
+            }
+
+            if (isset($url)) {
+                $data[] = [
+                    'id' => $this->getId($url),
+                    'status' => $status,
+                    'team1' => trim($item->find($this->config->getMatchTeamNameContainer(), 0)->text()),
+                    'team2' => trim($item->find($this->config->getMatchTeamNameContainer(), 1)->text()),
+                    'url' => $url,
+                    'type' => $this->getType(trim($item->find($this->config->getMatchTypeContainer(), 0)->text())),
+                    'event' => trim($item->find($this->config->getMatchEventContainer(), 0)->text()),
+                    'timestamp' => ((int)$item->find($this->config->getMatchTimeContainer(), 0)->getAttribute($this->config->getAttributeDataUnix()) / 1000),
+                ];
+            }
+        }
+
+        $this->data->clear();
+        return $data;
+    }
 }

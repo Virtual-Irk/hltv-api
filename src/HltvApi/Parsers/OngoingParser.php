@@ -3,7 +3,6 @@
 namespace HltvApi\Parsers;
 
 use HltvApi\Entity\Match;
-use simplehtmldom_1_5\simple_html_dom_node;
 
 /**
  * Class OngoingParser
@@ -16,13 +15,8 @@ class OngoingParser extends Parser
      */
     public function parse(): array
     {
-        $items = $this->data->find(self::MATCH_ONGOING_WRAPPER);
+        $items = $this->data->find($this->config->getMatchBaseContainer());
 
-        $data = [];
-        /** @var simple_html_dom_node[] $items */
-        foreach ($items as $item) {
-            $data[] = $this->fillMatchDataArray($item, Match::STATUS_ONGOING);
-        }
-        return $data;
+        return $this->fillMatchDataArray($items, Match::STATUS_ONGOING);
     }
 }
