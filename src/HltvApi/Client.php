@@ -5,11 +5,11 @@ namespace HltvApi;
 use Exception;
 use HltvApi\DataMapper\Event;
 use HltvApi\DataMapper\EventDetail;
-use HltvApi\Entity\Entity;
+use HltvApi\DataMapper\TeamMapStatistic;
 use HltvApi\Entity\Match;
-use HltvApi\Entity\MatchDetails;
 use HltvApi\Interfaces\Request;
-use HltvApi\Parsers\MatchDetailsParser;
+use HltvApi\Parsers\MapTeamStatisticParser;
+use HltvApi\Parsers\EventDetailsParser;
 use HltvApi\Parsers\LiveParser;
 use HltvApi\Parsers\Parser;
 use HltvApi\Parsers\ResultsParser;
@@ -81,6 +81,27 @@ class Client implements Request
     public function getUrlDetails($link): string
     {
         return $this->baseUrl . $link;
+    }
+
+    /**
+     * @param int $mapId
+     * @param int $teamId
+     * @param string $teamName
+     * @return string
+     */
+    public function getUrlMapStatistic(int $mapId, int $teamId, string $teamName): string
+    {
+        $url = $this->baseUrl . $this->config->getUrlMapStatRoute();
+        $dateFrom = date('Y-m-d', mktime(0, 0, 0, date('m') - 6, date('d')));
+        $dateTo = date('Y-m-d', mktime(0, 0, 0, date('m'), date('d')));
+
+        $url = str_replace('MAP_ID', $mapId, $url);
+        $url = str_replace('TEAM_ID', $teamId, $url);
+        $url = str_replace('TEAM_NAME', $teamName, $url);
+        $url = str_replace('DATE_FROM', $dateFrom, $url);
+        $url = str_replace('DATE_TO', $dateTo, $url);
+
+        return $url;
     }
 
     /**
@@ -179,7 +200,7 @@ class Client implements Request
      */
     public function getEventDetail(string $url): EventDetail
     {
-        $parser = $this->createDataParser(MatchDetailsParser::class, $this->getUrlDetails($url));
+        $parser = $this->createDataParser(EventDetailsParser::class, $this->getUrlDetails($url));
         return $parser->parse();
     }
 
@@ -196,13 +217,17 @@ class Client implements Request
     }
 
     /**
-     * @param $link
-     * @return MatchDetails|Entity
-     * @throws \Exception
+     * @param int $mapId
+     * @param int $teamId
+     * @param string $teamName
+     * @return TeamMapStatistic
+     * @throws Exception
      */
-    public function getMatchDetails(string $link): Entity
+    public function getMapTeamStatistic(int $mapId, int $teamId, string $teamName): TeamMapStatistic
     {
-        $parser = $this->createDataParser(MatchDetailsParser::class, $this->getUrlDetails($link));
-        return (new BaseWrapper(MatchDetails::class, $parser->parse(), $this))->fetchRow();
+        $parser = $this->createDataParser(MapTeamStatisticParser::class, $this->getUrlMapStatistic($mapId, $teamId, $teamName));
+        $data = $parser->parse();
+
+        return new TeamMapStatistic($teamId, $mapId, $data['totalMatches'], $data['totalLostMatches'], $data['meanFailScores'], $data['winPercent'], $data['winPercentCT'], $data['winPercentT']);
     }
 }

@@ -18,19 +18,24 @@ class Team
     /** @var string $url */
     private $url;
 
+    /** @var string $urlName */
+    private $urlName;
+
     /**
      * Team constructor.
      * @param int $id
      * @param string $name
      * @param int $position
      * @param string $url
+     * @param string $urlName
      */
-    public function __construct(int $id, string $name, int $position, string $url)
+    public function __construct(int $id, string $name, int $position, string $url, string $urlName)
     {
         $this->id = $id;
         $this->name = $name;
         $this->position = $position;
         $this->url = $url;
+        $this->urlName = $urlName;
     }
 
     /**
@@ -63,5 +68,13 @@ class Team
     public function getUrl(): string
     {
         return $this->url;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUrlName(): string
+    {
+        return $this->urlName;
     }
 }

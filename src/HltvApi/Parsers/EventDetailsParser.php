@@ -11,7 +11,7 @@ use HltvApi\DataMapper\Team;
  * Class MatchDetailsParser
  * @package HltvApi\Parsers
  */
-class MatchDetailsParser extends Parser
+class EventDetailsParser extends Parser
 {
     const ODDS_PROVIDERS = [
         'egb-nolink',
@@ -28,7 +28,7 @@ class MatchDetailsParser extends Parser
         for ($i = 0; $i < 2; $i++) {
             $teamName = trim($this->data->find($this->config->getMatchDetailTeamNameContainer(), $i)->text());
             $teamUrl = trim($this->data->find($this->config->getMatchDetailTeamUrlContainer(), $i)->getAttribute($this->config->getAttributeHref()));
-            $teams[] = new Team($this->getId($teamUrl), $teamName, $i + 1, $teamUrl);
+            $teams[] = new Team($this->getId($teamUrl), $teamName, $i + 1, $teamUrl, $this->getTeamNameFromUrl($teamUrl));
         }
 
         $mapMapping = $this->config->getMapMapping();

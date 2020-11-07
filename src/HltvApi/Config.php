@@ -91,4 +91,9 @@ class Config
     {
         return isset($this->config['upcoming']['matchContainer']) ? $this->config['upcoming']['matchContainer'] : null;
     }
+
+    public function getUrlMapStatRoute(): ?string
+    {
+        return isset($this->config['url']['mapStatRoute']) ? $this->config['url']['mapStatRoute'] : null;
+    }
 }

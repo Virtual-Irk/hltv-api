@@ -71,6 +71,18 @@ abstract class Parser
     }
 
     /**
+     * Internal hltv team url name using as string var per system
+     *
+     * @param $var
+     * @return string|null
+     */
+    public function getTeamNameFromUrl($var): ?string
+    {
+        $attr = explode("/", $var);
+        return isset($attr[3]) ? trim($attr[3]) : null;
+    }
+
+    /**
      * Return match type look for Match const
      *
      * @param $type
