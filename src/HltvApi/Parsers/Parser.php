@@ -139,9 +139,16 @@ abstract class Parser
 
             if (isset($url)) {
                 $id = (int)$this->getId($url);
-                $name = trim($item->find($this->config->match->getUrlContainer(), 0)->text());
-                $firstTeamName = trim($item->find($this->config->match->getTeamNameContainer(), 0)->text());
-                $secondTeamName = trim($item->find($this->config->match->getTeamNameContainer(), 1)->text());
+                $eventNameContainer = $item->find($this->config->match->getEventContainer(), 0);
+                if (!is_null($eventNameContainer)) {
+                    $name = trim($item->find($this->config->match->getEventContainer(), 0)->text());
+                    $firstTeamName = trim($item->find($this->config->match->getTeamNameContainer(), 0)->text());
+                    $secondTeamName = trim($item->find($this->config->match->getTeamNameContainer(), 1)->text());
+                } else {
+                    $name = $item->find('.matchInfoEmpty', 0)->text();
+                    $firstTeamName = $secondTeamName = 'TBA';
+                }
+
                 $type = (int)$this->getType(trim($item->find($this->config->match->getTypeContainer(), 0)->text()));
                 $timestamp = (int)($item->find($this->config->match->getTimeContainer(), 0)->getAttribute($this->config->attributes->getDataUnix()) / 1000);
 

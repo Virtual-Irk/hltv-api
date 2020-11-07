@@ -157,13 +157,13 @@ class Client implements Request
 
     /**
      * Getting an live list of Match objects
-     * @return Match[]|array|null
+     * @return Event[]
      * @throws Exception
      */
     public function getLiveMatchesList(): array
     {
         $parser = $this->createDataParser(LiveParser::class, $this->getUrlMatches());
-        return (new BaseWrapper(Match::class, $parser->parse(), $this))->fetchList();
+        return $parser->parse();
     }
 
     /**
