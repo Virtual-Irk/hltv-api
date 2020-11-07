@@ -27,9 +27,9 @@ class UpcomingParser extends Parser
         $items = [];
         while ($idx < $this->days) {
             $idx++;
-            $day = $this->data->find($this->config->getUpcomingMatchesContainer(), 0);
+            $day = $this->data->find($this->config->upcoming->getMatchesContainer(), 0);
             if (!is_null($day)) {
-                $items = array_merge($items, $day->find($this->config->getUpcomingMatchContainer()));
+                $items = array_merge($items, $day->find($this->config->upcoming->getMatchContainer()));
             }
         }
 

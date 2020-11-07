@@ -4,43 +4,44 @@ namespace HltvApi\Parsers;
 
 class MapTeamStatisticParser extends Parser
 {
-    public function parse()
+    public function parse(): array
     {
         $data = [];
-        $stats = $this->data->find('.stats-rows .stats-row');
+        $mapTeamStatConfig = $this->config->mapTeamStat;
+        $stats = $this->data->find($mapTeamStatConfig->getMainStatsContainer());
 
         foreach ($stats as $stat) {
             $rowText = trim($stat->text());
 
-            $arr = explode('Times played', $rowText);
+            $arr = explode($mapTeamStatConfig->getTotalMatchesDelimiter(), $rowText);
             if (count($arr) === 2) {
                 $data['totalMatches'] = (int)$arr[1];
                 continue;
             }
 
-            $arr = explode('Win percent', $rowText);
+            $arr = explode($mapTeamStatConfig->getWinPercentDelimiter(), $rowText);
             if (count($arr) === 2) {
                 $data['winPercent'] = (float)str_replace('%', '', $arr[1]);
                 continue;
             }
 
-            $arr = explode('CT round win percent', $rowText);
+            $arr = explode($mapTeamStatConfig->getWinPercentCTDelimiter(), $rowText);
             if (count($arr) === 2) {
                 $data['winPercentCT'] = (float)str_replace('%', '', $arr[1]);
                 continue;
             }
 
-            $arr = explode('T round win percent', $rowText);
+            $arr = explode($mapTeamStatConfig->getWinPercentTDelimiter(), $rowText);
             if (count($arr) === 2) {
                 $data['winPercentT'] = (float)str_replace('%', '', $arr[1]);
                 continue;
             }
         }
-        // Парсим и считаем количество очков набранных при поражении на выбранной карте
-        $loseMatches = $this->data->find('.match-lost');
+        // Parse and count the number of points scored in case of defeat on the selected card
+        $loseMatches = $this->data->find($mapTeamStatConfig->getLoseMatchesContainer());
         $lost_match_count = count($loseMatches);
         $scoresGainedInLose = 0;
-        $meanValue = 16; // Команда не проиграла ни разу на карте
+        $meanValue = 16; // The team has never lost on the map
         if ($lost_match_count > 0) {
             foreach ($loseMatches as $loseMatch) {
                 $matchScoreArr = array_map(function ($item) {

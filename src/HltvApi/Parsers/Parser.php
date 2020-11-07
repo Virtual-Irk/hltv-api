@@ -131,7 +131,7 @@ abstract class Parser
             switch ($status) {
                 case Match::STATUS_LIVE:
                 case Match::STATUS_UPCOMING:
-                    $url = trim($item->find($this->config->getMatchUrlContainer(), 0)->getAttribute($this->config->getAttributeHref()));
+                    $url = trim($item->find($this->config->match->getUrlContainer(), 0)->getAttribute($this->config->attributes->getHref()));
                     break;
                 default:
                     continue;
@@ -139,11 +139,11 @@ abstract class Parser
 
             if (isset($url)) {
                 $id = (int)$this->getId($url);
-                $name = trim($item->find($this->config->getMatchEventContainer(), 0)->text());
-                $firstTeamName = trim($item->find($this->config->getMatchTeamNameContainer(), 0)->text());
-                $secondTeamName = trim($item->find($this->config->getMatchTeamNameContainer(), 1)->text());
-                $type = (int)$this->getType(trim($item->find($this->config->getMatchTypeContainer(), 0)->text()));
-                $timestamp = (int)($item->find($this->config->getMatchTimeContainer(), 0)->getAttribute($this->config->getAttributeDataUnix()) / 1000);
+                $name = trim($item->find($this->config->match->getUrlContainer(), 0)->text());
+                $firstTeamName = trim($item->find($this->config->match->getTeamNameContainer(), 0)->text());
+                $secondTeamName = trim($item->find($this->config->match->getTeamNameContainer(), 1)->text());
+                $type = (int)$this->getType(trim($item->find($this->config->match->getTypeContainer(), 0)->text()));
+                $timestamp = (int)($item->find($this->config->match->getTimeContainer(), 0)->getAttribute($this->config->attributes->getDataUnix()) / 1000);
 
                 $data[] = new Event($id, $name, $url, $firstTeamName, $secondTeamName, $status, $type, $timestamp);
             }

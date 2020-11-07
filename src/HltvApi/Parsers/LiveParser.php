@@ -15,7 +15,7 @@ class LiveParser extends Parser
      */
     public function parse(): array
     {
-        $items = $this->data->find($this->config->getLiveMatchesContainer());
+        $items = $this->data->find($this->config->live->getMatchesContainer());
 
         return $this->fillMatchDataArray($items, Match::STATUS_LIVE);
     }

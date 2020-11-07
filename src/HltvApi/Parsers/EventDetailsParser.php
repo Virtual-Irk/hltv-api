@@ -26,16 +26,17 @@ class EventDetailsParser extends Parser
         $teams = $maps = [];
 
         for ($i = 0; $i < 2; $i++) {
-            $teamName = trim($this->data->find($this->config->getMatchDetailTeamNameContainer(), $i)->text());
-            $teamUrl = trim($this->data->find($this->config->getMatchDetailTeamUrlContainer(), $i)->getAttribute($this->config->getAttributeHref()));
+
+            $teamName = trim($this->data->find($this->config->matchDetail->getTeamNameContainer(), $i)->text());
+            $teamUrl = trim($this->data->find($this->config->matchDetail->getTeamUrlContainer(), $i)->getAttribute($this->config->attributes->getHref()));
             $teams[] = new Team($this->getId($teamUrl), $teamName, $i + 1, $teamUrl, $this->getTeamNameFromUrl($teamUrl));
         }
 
-        $mapMapping = $this->config->getMapMapping();
-        $mapsContainer = $this->data->find($this->config->getMatchDetailMapsContainer());
+        $mapMapping = $this->config->base->getMapMapping();
+        $mapsContainer = $this->data->find($this->config->matchDetail->getMapsContainer());
         $mapPosition = 1;
         foreach ($mapsContainer as $i => $map) {
-            $mapName = mb_strtolower(trim($map->find($this->config->getMatchDetailMapNameContainer(), 0)->text()));
+            $mapName = mb_strtolower(trim($map->find($this->config->matchDetail->getMapNameContainer(), 0)->text()));
             if (in_array($mapName, array_keys($mapMapping))) {
                 $mapId = $mapMapping[$mapName];
                 $maps[] = new Map($mapId, $mapName, $mapPosition);

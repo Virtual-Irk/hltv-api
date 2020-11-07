@@ -2,98 +2,70 @@
 
 namespace HltvApi;
 
+use Exception;
+use HltvApi\DataMapper\Config\Attributes;
+use HltvApi\DataMapper\Config\Base;
+use HltvApi\DataMapper\Config\Live;
+use HltvApi\DataMapper\Config\MapTeamStat;
+use HltvApi\DataMapper\Config\Match;
+use HltvApi\DataMapper\Config\MatchDetail;
+use HltvApi\DataMapper\Config\Upcoming;
+use HltvApi\DataMapper\Config\Url;
+
+/**
+ * Class Config
+ * @package HltvApi
+ */
 class Config
 {
-    /** @var array */
-    private $config;
+    const DEFAULT_CONFIG = __DIR__ . '/env.php';
+
+    /** @var Attributes */
+    public $attributes;
+
+    /** @var Base */
+    public $base;
+
+    /** @var Live */
+    public $live;
+
+    /** @var Match */
+    public $match;
+
+    /** @var MapTeamStat */
+    public $mapTeamStat;
+
+    /** @var MatchDetail */
+    public $matchDetail;
+
+    /** @var Upcoming */
+    public $upcoming;
+
+    /** @var Url */
+    public $url;
 
     /**
      * Config constructor.
-     *
-     * @param string $configPath
+     * @param string|null $configPath
+     * @throws Exception
      */
-    public function __construct(string $configPath)
+    public function __construct(string $configPath = null)
     {
-        $this->config = require $configPath;
-    }
+        $cfg = file_exists($configPath) ? $configPath : self::DEFAULT_CONFIG;
+        $config = require $cfg;
 
-    public function getAttributeDataUnix(): ?string
-    {
-        return isset($this->config['attributes']['dataUnix']) ? $this->config['attributes']['dataUnix'] : null;
-    }
-
-    public function getAttributeHref(): ?string
-    {
-        return isset($this->config['attributes']['href']) ? $this->config['attributes']['href'] : null;
-    }
-
-    public function getLiveMatchesContainer(): ?string
-    {
-        return isset($this->config['live']['matchesContainer']) ? $this->config['live']['matchesContainer'] : null;
-    }
-
-    public function getMapMapping(): ?array
-    {
-        return isset($this->config['mapIds']) ? $this->config['mapIds'] : null;
-    }
-
-    public function getMatchDetailMapsContainer(): ?string
-    {
-        return isset($this->config['matchDetail']['mapsContainer']) ? $this->config['matchDetail']['mapsContainer'] : null;
-    }
-
-    public function getMatchDetailMapNameContainer(): ?string
-    {
-        return isset($this->config['matchDetail']['mapNameContainer']) ? $this->config['matchDetail']['mapNameContainer'] : null;
-    }
-
-    public function getMatchDetailTeamNameContainer(): ?string
-    {
-        return isset($this->config['matchDetail']['teamNameContainer']) ? $this->config['matchDetail']['teamNameContainer'] : null;
-    }
-
-    public function getMatchDetailTeamUrlContainer(): ?string
-    {
-        return isset($this->config['matchDetail']['teamUrlContainer']) ? $this->config['matchDetail']['teamUrlContainer'] : null;
-    }
-
-    public function getMatchEventContainer(): ?string
-    {
-        return isset($this->config['match']['eventContainer']) ? $this->config['match']['eventContainer'] : null;
-    }
-
-    public function getMatchTeamNameContainer(): ?string
-    {
-        return isset($this->config['match']['teamNameContainer']) ? $this->config['match']['teamNameContainer'] : null;
-    }
-
-    public function getMatchTimeContainer(): ?string
-    {
-        return isset($this->config['match']['timeContainer']) ? $this->config['match']['timeContainer'] : null;
-    }
-
-    public function getMatchTypeContainer(): ?string
-    {
-        return isset($this->config['match']['typeContainer']) ? $this->config['match']['typeContainer'] : null;
-    }
-
-    public function getMatchUrlContainer(): ?string
-    {
-        return isset($this->config['match']['urlContainer']) ? $this->config['match']['urlContainer'] : null;
-    }
-
-    public function getUpcomingMatchesContainer(): ?string
-    {
-        return isset($this->config['upcoming']['matchesContainer']) ? $this->config['upcoming']['matchesContainer'] : null;
-    }
-
-    public function getUpcomingMatchContainer(): ?string
-    {
-        return isset($this->config['upcoming']['matchContainer']) ? $this->config['upcoming']['matchContainer'] : null;
-    }
-
-    public function getUrlMapStatRoute(): ?string
-    {
-        return isset($this->config['url']['mapStatRoute']) ? $this->config['url']['mapStatRoute'] : null;
+        $properties = array_keys(get_class_vars(self::class));
+        foreach ($properties as $property) {
+            if (!isset($config[$property])) {
+                throw new Exception('Config file must contain "' . $property . '"');
+            } else {
+                try {
+                    $className = 'HltvApi\DataMapper\Config\\' . ucfirst($property);
+                    $this->{$property} = new $className($config[$property]);
+                } catch (Exception $e) {
+                    throw new Exception($e->getMessage());
+                }
+            }
+        }
     }
 }

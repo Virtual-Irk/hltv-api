@@ -23,11 +23,6 @@ use HltvApi\Wrappers\BaseWrapper;
 class Client implements Request
 {
     /**
-     * Hltv WebAPI base URL
-     */
-    const BASE_URL = 'https://hltv.org';
-
-    /**
      * Array for proxy list (optional)
      * [
      *  ['0.0.0.0', '80', CURLPROXY_SOCKS5],
@@ -37,25 +32,18 @@ class Client implements Request
      */
     protected $proxyList;
 
-    /**
-     * @var string
-     */
-    protected $baseUrl;
-
     /** @var Config */
     protected $config;
 
     /**
      * Client constructor.
-     * @param string $configPath
-     * @param array $proxy
-     * @param string|null $baseUrl
+     * @param string|null $configPath
+     * @throws Exception
      */
-    public function __construct(string $configPath, array $proxy = [], string $baseUrl = null)
+    public function __construct(string $configPath = null)
     {
-        $this->proxyList = $proxy;
-        $this->baseUrl = $baseUrl ?? self::BASE_URL;
-        $this->config = new Config($configPath);
+        $this->config = is_null($configPath) ? new Config() : new Config($configPath);
+        $this->proxyList = $this->config->base->getProxyList();
     }
 
     /**
@@ -63,7 +51,7 @@ class Client implements Request
      */
     public function getUrlMatches(): string
     {
-        return $this->baseUrl . '/matches';
+        return $this->config->url->getBaseUrl() . $this->config->url->getMatchesRoute();
     }
 
     /**
@@ -71,7 +59,7 @@ class Client implements Request
      */
     public function getUrlResults(): string
     {
-        return $this->baseUrl . '/results';
+        return $this->config->url->getBaseUrl() . $this->config->url->getResultsRoute();
     }
 
     /**
@@ -80,7 +68,7 @@ class Client implements Request
      */
     public function getUrlDetails($link): string
     {
-        return $this->baseUrl . $link;
+        return $this->config->url->getBaseUrl() . $link;
     }
 
     /**
@@ -91,7 +79,7 @@ class Client implements Request
      */
     public function getUrlMapStatistic(int $mapId, int $teamId, string $teamName): string
     {
-        $url = $this->baseUrl . $this->config->getUrlMapStatRoute();
+        $url = $this->config->url->getBaseUrl() . $this->config->url->getMapStatRoute();
         $dateFrom = date('Y-m-d', mktime(0, 0, 0, date('m') - 6, date('d')));
         $dateTo = date('Y-m-d', mktime(0, 0, 0, date('m'), date('d')));
 
