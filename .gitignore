@@ -4,3 +4,8 @@ vendor/*
 build/*
 idea/*
 idea
+.idea
+.env
+/docker/
+/vendor/
+docker-compose.yml
